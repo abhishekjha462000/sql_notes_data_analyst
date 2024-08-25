@@ -17,9 +17,11 @@ SELECT brand_name AS company, battery_capacity AS mAh FROM smartphones;
 -- Mathematical Calculation USING SELECT
 SELECT SQRT(49);
 -- pixel per inch calculation
-SELECT ROUND(SQRT(
-				(resolution_width * resolution_width) + 
-				(resolution_height * resolution_height) 
-		    ) / screen_size, 2) AS ppi
+SELECT ROUND(
+				SQRT(
+						(resolution_width * resolution_width) + 
+                        (resolution_height * resolution_height)
+					) / screen_size,
+			2) AS ppi
 FROM smartphones;
 
