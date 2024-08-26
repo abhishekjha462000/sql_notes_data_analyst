@@ -1,1 +1,0 @@
-# sql_notes_data_analyst
