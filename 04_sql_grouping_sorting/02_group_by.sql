@@ -48,3 +48,15 @@ ORDER BY `average_screen_size` ASC LIMIT 0, 1;
 SELECT has_5g, ROUND(AVG(price), 2) AS `average_price` 
 FROM smartphones 
 GROUP BY has_5g;
+
+
+-- Question 8: Group phones by the brand and find the brand with the highest numbers of models that have both nfc and ir blaster
+SELECT brand_name, COUNT(*) FROM smartphones WHERE has_ir_blaster = 'True' AND has_nfc = 'True'
+GROUP BY brand_name ORDER BY COUNT(*) DESC;
+
+
+-- Question 9: Find all samsung 5g enabled phones and find out the average price for NFC and non-NFC phones
+SELECT has_nfc, ROUND(AVG(PRICE), 2) AS `average_price` FROM smartphones WHERE brand_name = 'samsung' AND has_5g = 'True'
+GROUP BY has_nfc ORDER BY has_nfc;
+
+
