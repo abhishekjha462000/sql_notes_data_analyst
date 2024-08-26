@@ -46,4 +46,5 @@ ORDER BY `average_screen_size` ASC LIMIT 0, 1;
 
 -- Question 7: Average price of 5g phones Vs Average price of non-5g phones
 SELECT has_5g, ROUND(AVG(price), 2) AS `average_price` 
-FROM smartphones GROUP BY has_5g;
+FROM smartphones 
+GROUP BY has_5g;
