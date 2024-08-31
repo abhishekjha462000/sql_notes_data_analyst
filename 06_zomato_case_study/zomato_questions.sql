@@ -84,19 +84,48 @@ SELECT name FROM users INNER JOIN orders ON users.user_id = orders.user_id;
 
 
 -- Find the favorite food of each customer
-WITH my_cte AS (SELECT name, f_name, COUNT(*) AS `times_ordered` FROM users u
-INNER JOIN orders o
-ON u.user_id = o.user_id
-INNER JOIN order_details od
-ON o.order_id = od.order_id
-INNER JOIN foods f
-ON od.f_id = f.f_id
-GROUP BY name, f_name
-ORDER BY name, times_ordered DESC)
-SELECT m1.name, f_name 
-FROM my_cte m1
+WITH my_cte AS (
+					SELECT name, f_name, COUNT(*) AS `times_ordered` FROM users u
+					INNER JOIN orders o
+					ON u.user_id = o.user_id
+					INNER JOIN order_details od
+					ON o.order_id = od.order_id
+					INNER JOIN foods f
+					ON od.f_id = f.f_id
+					GROUP BY name, f_name
+					ORDER BY name, times_ordered DESC
+				) 
+SELECT m1.name, f_name FROM my_cte m1
 WHERE times_ordered = (
 						SELECT MAX(times_ordered) 
                         FROM my_cte m2 
                         WHERE m2.name = m1.name
-					);
+					  );
+
+
+-- Find the delivery partner compensation using the formula (# deliveries * 100 + 1000 * avg_rating)
+SELECT 
+	partner_name, 
+	(COUNT(*) * 100 + 1000 * AVG(delivery_rating)) AS `compensation` 
+FROM delivery_partner dp
+INNER JOIN orders o
+ON o.partner_id = dp.partner_id
+GROUP BY partner_name
+ORDER BY compensation DESC;
+
+
+-- Find all the vegetarian restaurants
+WITH my_cte AS (
+					SELECT r_name, f.f_id, type FROM restaurants r
+					INNER JOIN menu m
+					ON r.r_id = m.r_id
+					INNER JOIN foods f
+					ON f.f_id = m.f_id
+					ORDER BY r_name ASC
+                )
+SELECT DISTINCT(r_name)
+FROM my_cte m1 
+WHERE 'Non-veg' NOT IN (
+						SELECT type FROM my_cte m2 
+                        WHERE m2.r_name = m1.r_name
+                        );
