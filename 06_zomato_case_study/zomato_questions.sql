@@ -83,3 +83,20 @@ EXCEPT
 SELECT name FROM users INNER JOIN orders ON users.user_id = orders.user_id;
 
 
+-- Find the favorite food of each customer
+WITH my_cte AS (SELECT name, f_name, COUNT(*) AS `times_ordered` FROM users u
+INNER JOIN orders o
+ON u.user_id = o.user_id
+INNER JOIN order_details od
+ON o.order_id = od.order_id
+INNER JOIN foods f
+ON od.f_id = f.f_id
+GROUP BY name, f_name
+ORDER BY name, times_ordered DESC)
+SELECT m1.name, f_name 
+FROM my_cte m1
+WHERE times_ordered = (
+						SELECT MAX(times_ordered) 
+                        FROM my_cte m2 
+                        WHERE m2.name = m1.name
+					);
