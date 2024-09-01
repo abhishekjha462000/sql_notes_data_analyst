@@ -8,18 +8,11 @@ WHERE (year, gross - budget) IN
 );
 
 -- chat gpt approach for table subquery (This is actually good and faster)
-SELECT 
-	m.name, 
-    m.year, 
-    m.gross - m.budget AS `profit` 
+SELECT m.name, m.year, m.gross - m.budget AS `profit` 
 FROM movies m 
 INNER JOIN
 (
-	SELECT 
-			year, 
-            MAX(gross - budget) AS `max_profit` 
-	FROM movies 
-	GROUP BY year
+	SELECT year, MAX(gross - budget) AS `max_profit` FROM movies GROUP BY year
 ) n
 ON m.year = n.year 
 AND m.gross - m.budget = n.max_profit;
