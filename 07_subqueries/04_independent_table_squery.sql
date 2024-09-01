@@ -30,3 +30,22 @@ JOIN (
     GROUP BY genre
 ) g ON m.genre = g.genre AND m.score = g.max_score
 WHERE m.votes > 25000;
+
+
+-- Find the highest grossing movies of top 5 actor/director combo in terms of total gross income
+SELECT name 
+FROM movies m 
+INNER JOIN (
+				SELECT 
+						star, 
+                        director, 
+						SUM(gross-budget) AS `total_gross_income`, 
+                        MAX(gross-budget) AS `max_profit` 
+				FROM movies
+				GROUP BY star, director
+				ORDER BY total_gross_income DESC 
+                LIMIT 0, 5
+			) n
+ON m.star = n.star 
+AND m.director = n.director 
+AND m.gross - m.budget = n.max_profit;
