@@ -1,17 +1,25 @@
 --  Find the most profitable movie of each year
 SELECT * FROM movies
-WHERE (year, gross - budget) IN (
-									SELECT year, MAX(gross - budget)
-									FROM movies 
-									GROUP BY year
+WHERE (year, gross - budget) IN 
+(
+	SELECT year, MAX(gross - budget)
+	FROM movies 
+	GROUP BY year
 );
 
 -- chat gpt approach for table subquery (This is actually good and faster)
-SELECT m.name, m.year, m.gross - m.budget AS `profit` 
+SELECT 
+	m.name, 
+    m.year, 
+    m.gross - m.budget AS `profit` 
 FROM movies m 
 INNER JOIN
 (
-	SELECT year, MAX(gross - budget) AS `max_profit` FROM movies GROUP BY year
+	SELECT 
+			year, 
+            MAX(gross - budget) AS `max_profit` 
+	FROM movies 
+	GROUP BY year
 ) n
 ON m.year = n.year 
 AND m.gross - m.budget = n.max_profit;
