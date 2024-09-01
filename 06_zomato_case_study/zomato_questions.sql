@@ -129,3 +129,4 @@ WHERE 'Non-veg' NOT IN (
 						SELECT type FROM my_cte m2 
                         WHERE m2.r_name = m1.r_name
                         );
+
